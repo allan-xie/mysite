@@ -1,0 +1,8 @@
+# vscode
+.vscode/
+#python
+.my_env/
+#db file
+db.sqlite3
+
+
