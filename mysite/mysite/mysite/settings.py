@@ -121,4 +121,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+
+
+# SMTP SERVER
+EMAIL_HOST = 'smtp.qiye.aliyun.com'
+EMAIL_PORT = '25'
+EMAIL_HOST_USER = 'allan.xie@theform.com.cn'
+EMAIL_HOST_PASSWORD = 'Form@Mail'
+EMAIL_USE_SSL = '465'
+
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
