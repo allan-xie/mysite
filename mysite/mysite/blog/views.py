@@ -70,7 +70,7 @@ def post_share(request,post_id):
 				    f"{post.title}"
 			message = f"Read {post.title} at {post_url}\n\n" \
     				f"{cd['name']}\'s comments: {cd['comments']}"
-			send_mail(subject, message, '68440183@qq.com',[cd['to']])
+			send_mail(subject, message, [cd['email']],[cd['to']])
 			sent = True
 			
 	else:
