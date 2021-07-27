@@ -28,5 +28,5 @@ def get_most_commented_posts(count=5):
 
 #custom template filters
 @register.filter(name='markdown')
-def markdown_format(test):
-    return mark_safe(markdown.markdown(Text))
+def markdown_format(text):
+    return mark_safe(markdown.markdown(text))
