@@ -1,15 +1,17 @@
 #from django.shortcuts import render
 
 # Create your views here.
+from django.contrib.postgres import search
 from taggit.models import Tag
 from django.db.models import Count
 from django.core.mail import send_mail
-from .forms import EmailPostForm,CommentForm
+from .forms import EmailPostForm,CommentForm,SearchForm
 from django.views.generic import ListView
 from django.shortcuts import render,get_object_or_404
 from .models import Post,Comment
 from django.core.paginator import Paginator,EmptyPage,\
 								  PageNotAnInteger
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 
 
 def post_list(request,tag_slug=None):
@@ -117,3 +119,27 @@ def post_detail(request, year, month, day, post):
 				'new_comment': new_comment,
 				'comment_form': comment_form,
 				'similar_posts':similar_posts})
+
+
+def post_search(request):
+	form = SearchForm()
+	query = None
+	results = []
+	if 'query' in request.GET:
+		form = SearchForm(request.GET)
+		if form.is_valid():
+			query = form.cleaned_data['query']
+			# results = Post.published.annotate(
+			# 	search=SearchVector('title','body'),
+			# ).filter(search=query)
+			search_vector = SearchVector('title','body')
+			search_query = SearchQuery(query)
+			results = Post.published.annotate(
+			 	search=search_vector,
+				rank=SearchRank(search_vector,search_query) 
+			 ).filter(search=search_query).order_by('-rank')
+	return render(request,
+			      'blog/post/search.html',
+				  {'form':form,
+				  'query':query,
+				  'results':results})
